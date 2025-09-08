@@ -1,0 +1,86 @@
+@import url('/theme/assets/css/main.css');
+
+/* Custom styles for worker components */
+.tabs {
+  margin-bottom: 2rem;
+}
+
+.tab-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.tab-list li {
+  margin-right: 1rem;
+}
+
+.tab-list button {
+  background: none;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tab-list li.active button {
+  border-bottom: 3px solid #4eb980;
+  color: #4eb980;
+}
+
+.skills-container {
+  margin-bottom: 1rem;
+}
+
+.skill-tag {
+  display: inline-block;
+  background: #4eb980;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 3px;
+}
+
+.remove-skill {
+  background: none;
+  border: none;
+  color: white;
+  margin-left: 0.5rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-skill {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.add-skill input {
+  flex: 1;
+}
+
+.large {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4eb980;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 736px) {
+  .tab-list {
+    flex-direction: column;
+  }
+  
+  .tab-list li {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  .add-skill {
+    flex-direction: column;
+  }
+}

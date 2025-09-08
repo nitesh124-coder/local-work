@@ -1,0 +1,21 @@
+{
+  "name": "local-skill-alerts-frontend",
+  "version": "1.0.0",
+  "description": "Frontend applications for Local Skill Alerts",
+  "scripts": {
+    "start:customer": "cd customer-app && npm start",
+    "start:worker": "cd worker-app && npm start",
+    "start:admin": "cd admin-panel && npm start",
+    "build:customer": "cd customer-app && npm run build",
+    "build:worker": "cd worker-app && npm run build",
+    "build:admin": "cd admin-panel && npm run build",
+    "test:customer": "cd customer-app && npm test",
+    "test:worker": "cd worker-app && npm test",
+    "test:admin": "cd admin-panel && npm test"
+  },
+  "workspaces": [
+    "customer-app",
+    "worker-app",
+    "admin-panel"
+  ]
+}
