@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Customer application for Local Skill Alerts",
   "main": "src/index.jsx",
+  "homepage": ".",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
