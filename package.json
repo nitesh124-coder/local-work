@@ -6,6 +6,7 @@
     "start:customer": "cd customer-app && npm start",
     "start:worker": "cd worker-app && npm start",
     "start:admin": "cd admin-panel && npm start",
+    "build": "npm run build:customer && npm run build:worker && npm run build:admin",
     "build:customer": "cd customer-app && npm run build",
     "build:worker": "cd worker-app && npm run build",
     "build:admin": "cd admin-panel && npm run build",
