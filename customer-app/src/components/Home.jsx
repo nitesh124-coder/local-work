@@ -15,12 +15,10 @@ const Home = () => {
   const fetchFeaturedServices = async () => {
     try {
       const servicesData = await ServiceService.getAllServices();
-      // Take first 6 services as featured
       const featured = (servicesData.services || []).slice(0, 6);
       setFeaturedServices(featured);
     } catch (err) {
       setError(err.message || 'Failed to fetch services');
-      // Fallback to default services if API fails
       const defaultServices = [
         { id: 1, name: "Plumbing", description: "Expert plumbers for all your piping and water system needs." },
         { id: 2, name: "Electrical", description: "Licensed electricians for wiring, installations and repairs." },
@@ -35,35 +33,32 @@ const Home = () => {
     }
   };
 
-  // Function to assign categories for styling
-  const getCategoryStyle = (index) => {
-    const styles = ['style1', 'style2', 'style3', 'style4', 'style5', 'style6'];
-    return styles[index % styles.length];
-  };
-
   return (
-    <div id="main">
-      <div className="inner">
-        <header>
-          <h1>Find Skilled Workers Near You<br />
-          Get Your Job Done Fast</h1>
-          <p>Local Skill Alerts connects you with verified professionals for all your home and business needs. From plumbing to painting, we've got you covered.</p>
-        </header>
-        <section className="tiles">
+    <div>
+      <div className="container-fluid bg-light p-5 text-center">
+        <h1 className="display-4">Find Skilled Workers Near You</h1>
+        <p className="lead">Get Your Job Done Fast. Local Skill Alerts connects you with verified professionals for all your home and business needs.</p>
+        <Link className="btn btn-primary btn-lg" to="/services" role="button">Browse Services</Link>
+      </div>
+
+      <div className="container mt-5">
+        <h2 className="text-center mb-4">Featured Services</h2>
+        {loading && <p>Loading...</p>}
+        {error && <p className="text-danger">{error}</p>}
+        <div className="row">
           {featuredServices.map((service, index) => (
-            <article className={getCategoryStyle(index)} key={service.id}>
-              <span className="image">
-                <img src={getServiceImagePath(service.name, index)} alt={service.name} />
-              </span>
-              <Link to={`/services`}>
-                <h2>{service.name}</h2>
-                <div className="content">
-                  <p>{service.description}</p>
+            <div className="col-md-4 mb-4" key={service.id}>
+              <div className="card h-100">
+                <img src={getServiceImagePath(service.name, index)} className="card-img-top" alt={service.name} style={{height: '200px', objectFit: 'cover'}} />
+                <div className="card-body">
+                  <h5 className="card-title">{service.name}</h5>
+                  <p className="card-text">{service.description}</p>
+                  <Link to={`/services`} className="btn btn-primary">Learn More</Link>
                 </div>
-              </Link>
-            </article>
+              </div>
+            </div>
           ))}
-        </section>
+        </div>
       </div>
     </div>
   );

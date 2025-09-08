@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import AdminAnalyticsService from '../services/adminAnalyticsService';
-import AdminJobService from '../services/adminJobService';
-import AdminWorkerService from '../services/adminWorkerService';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -25,7 +23,6 @@ const AdminDashboard = () => {
     setError('');
     
     try {
-      // Fetch analytics data
       const analyticsData = await AdminAnalyticsService.getAnalytics();
       setStats({
         totalWorkers: analyticsData.totalWorkers || 0,
@@ -36,8 +33,6 @@ const AdminDashboard = () => {
         totalRevenue: analyticsData.totalRevenue || 0
       });
       
-      // Fetch recent activity (simplified - in a real app you might have a specific endpoint)
-      // For now, we'll use mock data since there's no specific API for this
       const mockActivity = [
         { id: 1, activity: 'New worker registered', user: 'John Smith', time: '10 minutes ago' },
         { id: 2, activity: 'New job booking', user: 'Jane Doe', time: '25 minutes ago' },
@@ -47,7 +42,6 @@ const AdminDashboard = () => {
       setRecentActivity(mockActivity);
     } catch (err) {
       setError(err.message || 'Failed to fetch dashboard data');
-      // Fallback to default stats if API fails
       setStats({
         totalWorkers: 124,
         totalCustomers: 356,
@@ -63,81 +57,96 @@ const AdminDashboard = () => {
 
   if (loading && stats.totalWorkers === 0) {
     return (
-      <div id="main">
-        <div className="inner">
-          <h1>Admin Dashboard</h1>
-          <p>Loading dashboard data...</p>
-        </div>
+      <div className="container mt-5">
+        <h1>Admin Dashboard</h1>
+        <p>Loading dashboard data...</p>
       </div>
     );
   }
 
   return (
-    <div id="main">
-      <div className="inner">
-        <header>
-          <h1>Admin Dashboard</h1>
-          <p>Welcome to the Local Skill Alerts administration panel.</p>
-        </header>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        <section>
-          <h2>Overview</h2>
-          <div className="box alt">
-            <div className="row gtr-uniform">
-              <div className="col-4 col-12-medium">
-                <h3>Total Workers</h3>
-                <p className="large">{stats.totalWorkers}</p>
-              </div>
-              <div className="col-4 col-12-medium">
-                <h3>Total Customers</h3>
-                <p className="large">{stats.totalCustomers}</p>
-              </div>
-              <div className="col-4 col-12-medium">
-                <h3>Total Jobs</h3>
-                <p className="large">{stats.totalJobs}</p>
-              </div>
-              <div className="col-4 col-12-medium">
-                <h3>Completed Jobs</h3>
-                <p className="large">{stats.completedJobs}</p>
-              </div>
-              <div className="col-4 col-12-medium">
-                <h3>Pending Jobs</h3>
-                <p className="large">{stats.pendingJobs}</p>
-              </div>
-              <div className="col-4 col-12-medium">
-                <h3>Total Revenue</h3>
-                <p className="large">${stats.totalRevenue}</p>
-              </div>
+    <div className="container mt-5">
+      <header className="mb-4">
+        <h1>Admin Dashboard</h1>
+        <p>Welcome to the Local Skill Alerts administration panel.</p>
+      </header>
+      
+      {error && <div className="alert alert-danger">{error}</div>}
+      
+      <div className="row">
+        <div className="col-md-4 mb-4">
+          <div className="card text-white bg-primary">
+            <div className="card-body">
+              <h5 className="card-title">Total Workers</h5>
+              <p className="card-text fs-4">{stats.totalWorkers}</p>
             </div>
           </div>
-        </section>
-        
-        <section>
-          <h2>Recent Activity</h2>
-          <div className="table-wrapper">
-            <table>
-              <thead>
-                <tr>
-                  <th>Activity</th>
-                  <th>User</th>
-                  <th>Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentActivity.map(activity => (
-                  <tr key={activity.id}>
-                    <td>{activity.activity}</td>
-                    <td>{activity.user}</td>
-                    <td>{activity.time}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        </div>
+        <div className="col-md-4 mb-4">
+          <div className="card text-white bg-success">
+            <div className="card-body">
+              <h5 className="card-title">Total Customers</h5>
+              <p className="card-text fs-4">{stats.totalCustomers}</p>
+            </div>
           </div>
-        </section>
+        </div>
+        <div className="col-md-4 mb-4">
+          <div className="card text-white bg-info">
+            <div className="card-body">
+              <h5 className="card-title">Total Jobs</h5>
+              <p className="card-text fs-4">{stats.totalJobs}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-4 mb-4">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">Completed Jobs</h5>
+              <p className="card-text fs-4">{stats.completedJobs}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-4 mb-4">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">Pending Jobs</h5>
+              <p className="card-text fs-4">{stats.pendingJobs}</p>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-4 mb-4">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">Total Revenue</h5>
+              <p className="card-text fs-4">${stats.totalRevenue}</p>
+            </div>
+          </div>
+        </div>
       </div>
+      
+      <section className="mt-5">
+        <h2>Recent Activity</h2>
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Activity</th>
+                <th>User</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentActivity.map(activity => (
+                <tr key={activity.id}>
+                  <td>{activity.activity}</td>
+                  <td>{activity.user}</td>
+                  <td>{activity.time}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 };

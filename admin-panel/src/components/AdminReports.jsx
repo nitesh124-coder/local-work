@@ -26,7 +26,6 @@ const AdminReports = () => {
     try {
       const analyticsData = await AdminAnalyticsService.getAnalytics();
       
-      // Process revenue data
       setRevenueData(analyticsData.revenueData || [
         { month: 'January', revenue: 35000, bookings: 240 },
         { month: 'February', revenue: 38000, bookings: 265 },
@@ -36,7 +35,6 @@ const AdminReports = () => {
         { month: 'June', revenue: 48000, bookings: 342 }
       ]);
       
-      // Process worker performance data
       setWorkerPerformance(analyticsData.workerPerformance || [
         { name: 'John Smith', jobs: 42, rating: 4.8, revenue: 8400 },
         { name: 'Mike Johnson', jobs: 38, rating: 4.9, revenue: 7980 },
@@ -44,7 +42,6 @@ const AdminReports = () => {
         { name: 'Robert Brown', jobs: 35, rating: 4.6, revenue: 7350 }
       ]);
       
-      // Process booking statistics
       setBookingStats({
         total: analyticsData.totalBookings || 842,
         completed: analyticsData.completedBookings || 789,
@@ -52,7 +49,6 @@ const AdminReports = () => {
         completionRate: analyticsData.completionRate || 93.7
       });
       
-      // Process service bookings
       setServiceBookings(analyticsData.serviceBookings || [
         { service: 'Plumbing', bookings: 126, percentage: 15 },
         { service: 'Electrical', bookings: 98, percentage: 11.6 },
@@ -61,36 +57,6 @@ const AdminReports = () => {
       ]);
     } catch (err) {
       setError(err.message || 'Failed to fetch report data');
-      // Fallback to mock data if API fails
-      setRevenueData([
-        { month: 'January', revenue: 35000, bookings: 240 },
-        { month: 'February', revenue: 38000, bookings: 265 },
-        { month: 'March', revenue: 42000, bookings: 298 },
-        { month: 'April', revenue: 39000, bookings: 276 },
-        { month: 'May', revenue: 45000, bookings: 320 },
-        { month: 'June', revenue: 48000, bookings: 342 }
-      ]);
-      
-      setWorkerPerformance([
-        { name: 'John Smith', jobs: 42, rating: 4.8, revenue: 8400 },
-        { name: 'Mike Johnson', jobs: 38, rating: 4.9, revenue: 7980 },
-        { name: 'Sarah Williams', jobs: 29, rating: 4.7, revenue: 6090 },
-        { name: 'Robert Brown', jobs: 35, rating: 4.6, revenue: 7350 }
-      ]);
-      
-      setBookingStats({
-        total: 842,
-        completed: 789,
-        pending: 53,
-        completionRate: 93.7
-      });
-      
-      setServiceBookings([
-        { service: 'Plumbing', bookings: 126, percentage: 15 },
-        { service: 'Electrical', bookings: 98, percentage: 11.6 },
-        { service: 'Carpentry', bookings: 84, percentage: 10 },
-        { service: 'Painting', bookings: 112, percentage: 13.3 }
-      ]);
     } finally {
       setLoading(false);
     }
@@ -98,48 +64,40 @@ const AdminReports = () => {
 
   if (loading && revenueData.length === 0) {
     return (
-      <div id="main">
-        <div className="inner">
-          <header>
-            <h1>Reports & Analytics</h1>
-            <p>View detailed reports and analytics for your platform.</p>
-          </header>
-          <p>Loading report data...</p>
-        </div>
+      <div className="container mt-5">
+        <h1>Reports & Analytics</h1>
+        <p>Loading report data...</p>
       </div>
     );
   }
 
   return (
-    <div id="main">
-      <div className="inner">
-        <header>
-          <h1>Reports & Analytics</h1>
-          <p>View detailed reports and analytics for your platform.</p>
-        </header>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        <section>
-          <div className="row gtr-uniform">
-            <div className="col-12">
-              <select
-                value={reportType}
-                onChange={(e) => setReportType(e.target.value)}
-              >
-                <option value="revenue">Revenue Report</option>
-                <option value="performance">Worker Performance</option>
-                <option value="bookings">Booking Statistics</option>
-              </select>
-            </div>
-          </div>
-        </section>
-        
-        {reportType === 'revenue' && (
-          <section>
-            <h2>Revenue Report</h2>
-            <div className="table-wrapper">
-              <table>
+    <div className="container mt-5">
+      <header className="mb-4">
+        <h1>Reports & Analytics</h1>
+        <p>View detailed reports and analytics for your platform.</p>
+      </header>
+      
+      {error && <div className="alert alert-danger">{error}</div>}
+      
+      <div className="mb-4">
+        <select
+          className="form-select"
+          value={reportType}
+          onChange={(e) => setReportType(e.target.value)}
+        >
+          <option value="revenue">Revenue Report</option>
+          <option value="performance">Worker Performance</option>
+          <option value="bookings">Booking Statistics</option>
+        </select>
+      </div>
+      
+      {reportType === 'revenue' && (
+        <div className="card">
+          <div className="card-body">
+            <h2 className="card-title">Revenue Report</h2>
+            <div className="table-responsive">
+              <table className="table table-striped">
                 <thead>
                   <tr>
                     <th>Month</th>
@@ -160,27 +118,16 @@ const AdminReports = () => {
                 </tbody>
               </table>
             </div>
-            
-            <h3>Revenue Chart</h3>
-            <div className="chart-placeholder">
-              <p>Revenue chart visualization would appear here</p>
-              <div className="chart-bar">
-                {revenueData.map((data, index) => (
-                  <div key={index} className="bar" style={{ height: `${(data.revenue / 50000) * 200}px` }}>
-                    <span className="bar-value">${data.revenue?.toLocaleString()}</span>
-                    <span className="bar-label">{data.month}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-        
-        {reportType === 'performance' && (
-          <section>
-            <h2>Worker Performance</h2>
-            <div className="table-wrapper">
-              <table>
+          </div>
+        </div>
+      )}
+      
+      {reportType === 'performance' && (
+        <div className="card">
+          <div className="card-body">
+            <h2 className="card-title">Worker Performance</h2>
+            <div className="table-responsive">
+              <table className="table table-striped">
                 <thead>
                   <tr>
                     <th>Worker Name</th>
@@ -201,36 +148,52 @@ const AdminReports = () => {
                 </tbody>
               </table>
             </div>
-          </section>
-        )}
-        
-        {reportType === 'bookings' && (
-          <section>
-            <h2>Booking Statistics</h2>
-            <div className="box alt">
-              <div className="row gtr-uniform">
-                <div className="col-3 col-12-medium">
-                  <h3>Total Bookings</h3>
-                  <p className="large">{bookingStats.total}</p>
+          </div>
+        </div>
+      )}
+      
+      {reportType === 'bookings' && (
+        <div className="card">
+          <div className="card-body">
+            <h2 className="card-title">Booking Statistics</h2>
+            <div className="row text-center mb-4">
+              <div className="col-md-3">
+                <div className="card bg-light">
+                  <div className="card-body">
+                    <h5 className="card-title">Total Bookings</h5>
+                    <p className="card-text fs-4">{bookingStats.total}</p>
+                  </div>
                 </div>
-                <div className="col-3 col-12-medium">
-                  <h3>Completed</h3>
-                  <p className="large">{bookingStats.completed}</p>
+              </div>
+              <div className="col-md-3">
+                <div className="card bg-light">
+                  <div className="card-body">
+                    <h5 className="card-title">Completed</h5>
+                    <p className="card-text fs-4">{bookingStats.completed}</p>
+                  </div>
                 </div>
-                <div className="col-3 col-12-medium">
-                  <h3>Pending</h3>
-                  <p className="large">{bookingStats.pending}</p>
+              </div>
+              <div className="col-md-3">
+                <div className="card bg-light">
+                  <div className="card-body">
+                    <h5 className="card-title">Pending</h5>
+                    <p className="card-text fs-4">{bookingStats.pending}</p>
+                  </div>
                 </div>
-                <div className="col-3 col-12-medium">
-                  <h3>Completion Rate</h3>
-                  <p className="large">{bookingStats.completionRate}%</p>
+              </div>
+              <div className="col-md-3">
+                <div className="card bg-light">
+                  <div className="card-body">
+                    <h5 className="card-title">Completion Rate</h5>
+                    <p className="card-text fs-4">{bookingStats.completionRate}%</p>
+                  </div>
                 </div>
               </div>
             </div>
             
             <h3>Bookings by Service</h3>
-            <div className="table-wrapper">
-              <table>
+            <div className="table-responsive">
+              <table className="table table-striped">
                 <thead>
                   <tr>
                     <th>Service</th>
@@ -249,9 +212,9 @@ const AdminReports = () => {
                 </tbody>
               </table>
             </div>
-          </section>
-        )}
-      </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -21,11 +21,6 @@ const AdminCustomers = () => {
     setError('');
     
     try {
-      // Since there's no specific endpoint for customers in the admin API list,
-      // we'll use a generic approach. In a real implementation, you would have
-      // a specific endpoint like /admin/customers
-      const response = await apiClient.get('/admin/analytics');
-      // For now, we'll use mock data since there's no specific API
       const mockCustomers = [
         {
           id: 1,
@@ -58,7 +53,6 @@ const AdminCustomers = () => {
       setCustomers(mockCustomers);
     } catch (err) {
       setError(err.message || 'Failed to fetch customers');
-      // Fallback to mock data if API fails
       const mockCustomers = [
         {
           id: 1,
@@ -111,88 +105,74 @@ const AdminCustomers = () => {
 
   if (loading && customers.length === 0) {
     return (
-      <div id="main">
-        <div className="inner">
-          <header>
-            <h1>Manage Customers</h1>
-            <p>View and manage all registered customers.</p>
-          </header>
-          <p>Loading customers...</p>
-        </div>
+      <div className="container mt-5">
+        <h1>Manage Customers</h1>
+        <p>Loading customers...</p>
       </div>
     );
   }
 
   return (
-    <div id="main">
-      <div className="inner">
-        <header>
-          <h1>Manage Customers</h1>
-          <p>View and manage all registered customers.</p>
-        </header>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        <section>
-          <div className="row gtr-uniform">
-            <div className="col-6 col-12-xsmall">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search customers..."
-              />
-            </div>
-            <div className="col-6 col-12-xsmall">
-              <button className="button primary" onClick={fetchCustomers}>Refresh</button>
-            </div>
-          </div>
-        </section>
-        
-        <section>
-          <h2>Customers List</h2>
-          {filteredCustomers.length > 0 ? (
-            <div className="table-wrapper">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                    <th>Status</th>
-                    <th>Bookings</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredCustomers.map(customer => (
-                    <tr key={customer.id}>
-                      <td>{customer.name || 'N/A'}</td>
-                      <td>{customer.email || 'N/A'}</td>
-                      <td>{customer.phone || 'N/A'}</td>
-                      <td>{customer.address || 'N/A'}</td>
-                      <td>
-                        <span className={`status ${customer.status?.toLowerCase() || 'active'}`}>
-                          {customer.status || 'Active'}
-                        </span>
-                      </td>
-                      <td>{customer.totalBookings || 0}</td>
-                      <td>
-                        <button className="button small">View</button>
-                        <button className="button small">Edit</button>
-                        <button className="button small">Delete</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p>No customers found.</p>
-          )}
-        </section>
+    <div className="container mt-5">
+      <header className="mb-4">
+        <h1>Manage Customers</h1>
+        <p>View and manage all registered customers.</p>
+      </header>
+      
+      {error && <div className="alert alert-danger">{error}</div>}
+      
+      <div className="d-flex justify-content-between mb-4">
+        <input
+          type="text"
+          className="form-control w-50"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search customers..."
+        />
+        <button className="btn btn-primary" onClick={fetchCustomers}>Refresh</button>
       </div>
+      
+      <h2>Customers List</h2>
+      {filteredCustomers.length > 0 ? (
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Bookings</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredCustomers.map(customer => (
+                <tr key={customer.id}>
+                  <td>{customer.name || 'N/A'}</td>
+                  <td>{customer.email || 'N/A'}</td>
+                  <td>{customer.phone || 'N/A'}</td>
+                  <td>{customer.address || 'N/A'}</td>
+                  <td>
+                    <span className={`badge bg-${customer.status?.toLowerCase() === 'active' ? 'success' : 'danger'}`}>
+                      {customer.status || 'Active'}
+                    </span>
+                  </td>
+                  <td>{customer.totalBookings || 0}</td>
+                  <td>
+                    <button className="btn btn-sm btn-info me-2">View</button>
+                    <button className="btn btn-sm btn-warning me-2">Edit</button>
+                    <button className="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p>No customers found.</p>
+      )}
     </div>
   );
 };

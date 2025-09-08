@@ -25,7 +25,6 @@ const AdminLogin = () => {
     
     try {
       await AdminAuthService.login(loginData);
-      // Redirect to dashboard after successful login
       navigate('/');
     } catch (err) {
       setError(err.message || 'Failed to login');
@@ -35,43 +34,51 @@ const AdminLogin = () => {
   };
 
   return (
-    <div id="main">
-      <div className="inner">
-        <h1>Admin Login</h1>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        <form method="post" onSubmit={handleSubmit}>
-          <div className="row gtr-uniform">
-            <div className="col-12">
-              <input
-                type="email"
-                name="email"
-                id="email"
-                value={loginData.email}
-                onChange={handleChange}
-                placeholder="Admin Email"
-                required
-              />
-            </div>
-            <div className="col-12">
-              <input
-                type="password"
-                name="password"
-                id="password"
-                value={loginData.password}
-                onChange={handleChange}
-                placeholder="Admin Password"
-                required
-              />
-            </div>
-            <div className="col-12">
-              <ul className="actions">
-                <li><input type="submit" value={loading ? "Logging in..." : "Login"} className="primary" disabled={loading} /></li>
-              </ul>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h1 className="card-title text-center">Admin Login</h1>
+              
+              {error && <div className="alert alert-danger">{error}</div>}
+              
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">Email</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    name="email"
+                    value={loginData.email}
+                    onChange={handleChange}
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">Password</label>
+                  <input
+                    type="password"
+                    className="form-control"
+                    id="password"
+                    name="password"
+                    value={loginData.password}
+                    onChange={handleChange}
+                    placeholder="Enter your password"
+                    required
+                  />
+                </div>
+                <div className="d-grid">
+                  <button type="submit" className="btn btn-primary" disabled={loading}>
+                    {loading ? 'Logging in...' : 'Login'}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );

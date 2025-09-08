@@ -32,7 +32,6 @@ const WorkerLogin = () => {
     
     try {
       await WorkerAuthService.verifyOTP(phone, otp);
-      // Redirect to dashboard after successful login
       navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'Failed to verify OTP');
@@ -42,60 +41,66 @@ const WorkerLogin = () => {
   };
 
   return (
-    <div id="main">
-      <div className="inner">
-        <h1>Worker Login</h1>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        {step === 'phone' ? (
-          <form method="post" onSubmit={handlePhoneSubmit}>
-            <div className="row gtr-uniform">
-              <div className="col-12">
-                <input
-                  type="tel"
-                  name="phone"
-                  id="phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Phone Number"
-                  required
-                />
-              </div>
-              <div className="col-12">
-                <ul className="actions">
-                  <li><input type="submit" value={loading ? "Sending OTP..." : "Send OTP"} className="primary" disabled={loading} /></li>
-                </ul>
-              </div>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h1 className="card-title text-center">Worker Login</h1>
+              
+              {error && <div className="alert alert-danger">{error}</div>}
+              
+              {step === 'phone' ? (
+                <form onSubmit={handlePhoneSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="phone" className="form-label">Phone Number</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Enter your phone number"
+                      required
+                    />
+                  </div>
+                  <div className="d-grid">
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                      {loading ? 'Sending OTP...' : 'Send OTP'}
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <form onSubmit={handleOtpSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="otp" className="form-label">Enter OTP</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="otp"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      placeholder="Enter the OTP you received"
+                      required
+                    />
+                  </div>
+                  <div className="d-grid gap-2">
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                      {loading ? 'Verifying...' : 'Verify OTP'}
+                    </button>
+                    <button type="button" onClick={() => setStep('phone')} className="btn btn-secondary">
+                      Change Number
+                    </button>
+                  </div>
+                </form>
+              )}
+              
+              <p className="mt-3 text-center">
+                Don't have an account? <Link to="/register">Register here</Link>
+              </p>
             </div>
-          </form>
-        ) : (
-          <form method="post" onSubmit={handleOtpSubmit}>
-            <div className="row gtr-uniform">
-              <div className="col-12">
-                <input
-                  type="text"
-                  name="otp"
-                  id="otp"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  placeholder="Enter OTP"
-                  required
-                />
-              </div>
-              <div className="col-12">
-                <ul className="actions">
-                  <li><input type="submit" value={loading ? "Verifying..." : "Verify OTP"} className="primary" disabled={loading} /></li>
-                  <li><button type="button" onClick={() => setStep('phone')} className="button">Change Number</button></li>
-                </ul>
-              </div>
-            </div>
-          </form>
-        )}
-        
-        <p>
-          Don't have an account? <Link to="/register">Register here</Link>
-        </p>
+          </div>
+        </div>
       </div>
     </div>
   );

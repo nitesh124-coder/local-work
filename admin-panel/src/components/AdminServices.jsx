@@ -59,7 +59,6 @@ const AdminServices = () => {
       await AdminServiceService.addService(newService);
       setNewService({ name: '', category: '', description: '' });
       setShowAddForm(false);
-      // Refresh the service list
       fetchServices();
       alert('Service added successfully!');
     } catch (err) {
@@ -78,135 +77,129 @@ const AdminServices = () => {
 
   if (loading && services.length === 0) {
     return (
-      <div id="main">
-        <div className="inner">
-          <header>
-            <h1>Manage Services</h1>
-            <p>View and manage all available services.</p>
-          </header>
-          <p>Loading services...</p>
-        </div>
+      <div className="container mt-5">
+        <h1>Manage Services</h1>
+        <p>Loading services...</p>
       </div>
     );
   }
 
   return (
-    <div id="main">
-      <div className="inner">
-        <header>
-          <h1>Manage Services</h1>
-          <p>View and manage all available services.</p>
-        </header>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        <section>
-          <div className="row gtr-uniform">
-            <div className="col-6 col-12-xsmall">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search services..."
-              />
-            </div>
-            <div className="col-6 col-12-xsmall">
-              <button className="button primary" onClick={() => setShowAddForm(!showAddForm)}>
-                {showAddForm ? 'Cancel' : 'Add New Service'}
-              </button>
-            </div>
-          </div>
-        </section>
-        
-        {showAddForm && (
-          <section>
-            <h2>Add New Service</h2>
-            <form method="post" onSubmit={handleAddService}>
-              <div className="row gtr-uniform">
-                <div className="col-6 col-12-xsmall">
+    <div className="container mt-5">
+      <header className="mb-4">
+        <h1>Manage Services</h1>
+        <p>View and manage all available services.</p>
+      </header>
+      
+      {error && <div className="alert alert-danger">{error}</div>}
+      
+      <div className="d-flex justify-content-between mb-4">
+        <input
+          type="text"
+          className="form-control w-50"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search services..."
+        />
+        <button className="btn btn-primary" onClick={() => setShowAddForm(!showAddForm)}>
+          {showAddForm ? 'Cancel' : 'Add New Service'}
+        </button>
+      </div>
+      
+      {showAddForm && (
+        <div className="card mb-4">
+          <div className="card-body">
+            <h2 className="card-title">Add New Service</h2>
+            <form onSubmit={handleAddService}>
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="name" className="form-label">Service Name</label>
                   <input
                     type="text"
+                    className="form-control"
+                    id="name"
                     name="name"
                     value={newService.name}
                     onChange={handleNewServiceChange}
-                    placeholder="Service Name"
+                    placeholder="e.g., Plumbing"
                     required
                   />
                 </div>
-                <div className="col-6 col-12-xsmall">
+                <div className="col-md-6 mb-3">
+                  <label htmlFor="category" className="form-label">Category</label>
                   <input
                     type="text"
+                    className="form-control"
+                    id="category"
                     name="category"
                     value={newService.category}
                     onChange={handleNewServiceChange}
-                    placeholder="Category"
+                    placeholder="e.g., Home Maintenance"
                     required
                   />
                 </div>
-                <div className="col-12">
-                  <textarea
-                    name="description"
-                    value={newService.description}
-                    onChange={handleNewServiceChange}
-                    placeholder="Description"
-                    rows="3"
-                    required
-                  ></textarea>
-                </div>
-                <div className="col-12">
-                  <ul className="actions">
-                    <li><input type="submit" value={loading ? "Adding..." : "Add Service"} className="primary" disabled={loading} /></li>
-                  </ul>
-                </div>
               </div>
+              <div className="mb-3">
+                <label htmlFor="description" className="form-label">Description</label>
+                <textarea
+                  className="form-control"
+                  id="description"
+                  name="description"
+                  value={newService.description}
+                  onChange={handleNewServiceChange}
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" className="btn btn-primary" disabled={loading}>
+                {loading ? 'Adding...' : 'Add Service'}
+              </button>
             </form>
-          </section>
-        )}
-        
-        <section>
-          <h2>Services List</h2>
-          {filteredServices.length > 0 ? (
-            <div className="table-wrapper">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Service</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Workers</th>
-                    <th>Bookings</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredServices.map(service => (
-                    <tr key={service.id}>
-                      <td>{service.name || 'N/A'}</td>
-                      <td>{service.category || 'N/A'}</td>
-                      <td>{service.description || 'N/A'}</td>
-                      <td>
-                        <span className={`status ${service.status?.toLowerCase() || 'active'}`}>
-                          {service.status || 'Active'}
-                        </span>
-                      </td>
-                      <td>{service.workers || 0}</td>
-                      <td>{service.bookings || 0}</td>
-                      <td>
-                        <button className="button small">View</button>
-                        <button className="button small">Edit</button>
-                        <button className="button small">Delete</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <p>No services found.</p>
-          )}
-        </section>
-      </div>
+          </div>
+        </div>
+      )}
+      
+      <h2>Services List</h2>
+      {filteredServices.length > 0 ? (
+        <div className="table-responsive">
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Workers</th>
+                <th>Bookings</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredServices.map(service => (
+                <tr key={service.id}>
+                  <td>{service.name || 'N/A'}</td>
+                  <td>{service.category || 'N/A'}</td>
+                  <td>{service.description || 'N/A'}</td>
+                  <td>
+                    <span className={`badge bg-${service.status?.toLowerCase() === 'active' ? 'success' : 'danger'}`}>
+                      {service.status || 'Active'}
+                    </span>
+                  </td>
+                  <td>{service.workers || 0}</td>
+                  <td>{service.bookings || 0}</td>
+                  <td>
+                    <button className="btn btn-sm btn-info me-2">View</button>
+                    <button className="btn btn-sm btn-warning me-2">Edit</button>
+                    <button className="btn btn-sm btn-danger">Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p>No services found.</p>
+      )}
     </div>
   );
 };

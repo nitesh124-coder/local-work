@@ -52,11 +52,10 @@ const Register = () => {
         name,
         email,
         phone,
-        role: 'customer' // Default role for customer app
+        role: 'customer'
       };
       
       await AuthService.register(userData);
-      // Redirect to dashboard after successful registration
       navigate('/dashboard');
     } catch (err) {
       setError(err.message || 'Failed to register');
@@ -66,96 +65,102 @@ const Register = () => {
   };
 
   return (
-    <div id="main">
-      <div className="inner">
-        <h1>Create an Account</h1>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        {step === 'phone' && (
-          <form method="post" onSubmit={handlePhoneSubmit}>
-            <div className="row gtr-uniform">
-              <div className="col-12">
-                <input
-                  type="tel"
-                  name="phone"
-                  id="phone"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Phone Number"
-                  required
-                />
-              </div>
-              <div className="col-12">
-                <ul className="actions">
-                  <li><input type="submit" value={loading ? "Sending OTP..." : "Send OTP"} className="primary" disabled={loading} /></li>
-                </ul>
-              </div>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h1 className="card-title text-center">Create an Account</h1>
+              
+              {error && <div className="alert alert-danger">{error}</div>}
+              
+              {step === 'phone' && (
+                <form onSubmit={handlePhoneSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="phone" className="form-label">Phone Number</label>
+                    <input
+                      type="tel"
+                      className="form-control"
+                      id="phone"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Enter your phone number"
+                      required
+                    />
+                  </div>
+                  <div className="d-grid">
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                      {loading ? 'Sending OTP...' : 'Send OTP'}
+                    </button>
+                  </div>
+                </form>
+              )}
+              
+              {step === 'otp' && (
+                <form onSubmit={handleOtpSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="otp" className="form-label">Enter OTP</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="otp"
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      placeholder="Enter the OTP you received"
+                      required
+                    />
+                  </div>
+                  <div className="d-grid gap-2">
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                      {loading ? 'Verifying...' : 'Verify OTP'}
+                    </button>
+                    <button type="button" onClick={() => setStep('phone')} className="btn btn-secondary">
+                      Change Number
+                    </button>
+                  </div>
+                </form>
+              )}
+              
+              {step === 'details' && (
+                <form onSubmit={handleDetailsSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="name" className="form-label">Full Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Enter your full name"
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label">Email</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
+                  <div className="d-grid">
+                    <button type="submit" className="btn btn-primary" disabled={loading}>
+                      {loading ? 'Registering...' : 'Register'}
+                    </button>
+                  </div>
+                </form>
+              )}
+              
+              <p className="mt-3 text-center">
+                Already have an account? <Link to="/login">Login here</Link>
+              </p>
             </div>
-          </form>
-        )}
-        
-        {step === 'otp' && (
-          <form method="post" onSubmit={handleOtpSubmit}>
-            <div className="row gtr-uniform">
-              <div className="col-12">
-                <input
-                  type="text"
-                  name="otp"
-                  id="otp"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  placeholder="Enter OTP"
-                  required
-                />
-              </div>
-              <div className="col-12">
-                <ul className="actions">
-                  <li><input type="submit" value={loading ? "Verifying..." : "Verify OTP"} className="primary" disabled={loading} /></li>
-                  <li><button type="button" onClick={() => setStep('phone')} className="button">Change Number</button></li>
-                </ul>
-              </div>
-            </div>
-          </form>
-        )}
-        
-        {step === 'details' && (
-          <form method="post" onSubmit={handleDetailsSubmit}>
-            <div className="row gtr-uniform">
-              <div className="col-12">
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Full Name"
-                  required
-                />
-              </div>
-              <div className="col-12">
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email"
-                  required
-                />
-              </div>
-              <div className="col-12">
-                <ul className="actions">
-                  <li><input type="submit" value={loading ? "Registering..." : "Register"} className="primary" disabled={loading} /></li>
-                </ul>
-              </div>
-            </div>
-          </form>
-        )}
-        
-        <p>
-          Already have an account? <Link to="/login">Login here</Link>
-        </p>
+          </div>
+        </div>
       </div>
     </div>
   );
